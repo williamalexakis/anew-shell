@@ -64,10 +64,12 @@ static AstSequence *parse_sequence(Parser *parser) {
 
     const Token *token = peek(parser);
 
-    if (!token || token->type == TOK_EOF) return NULL;  // EOF reached
+    if (!token || token->type == TOK_EOF)
+
+        return NULL;
 
     AstSequence *sequence = create_ast_sequence();
-    AstPipeline *pipeline = create_ast_pipeline();
+    AstPipeline *pipeline = parse_pipeline(parser);
 
     if (!pipeline) {
 
@@ -81,9 +83,9 @@ static AstSequence *parse_sequence(Parser *parser) {
 
     while (match(parser, TOK_SEMICOLON)) {
 
-        const Token *next_token = peek(parser);
+        const Token *next = peek(parser);
 
-        if (!next_token || next_token->type == TOK_EOF) break;
+        if (!next || next->type == TOK_EOF) break;
 
         pipeline = parse_pipeline(parser);
 
@@ -96,11 +98,9 @@ static AstSequence *parse_sequence(Parser *parser) {
         }
 
         append_ast_sequence(sequence, pipeline);
-
     }
 
     return sequence;
-
 }
 
 /* Process a command node */
@@ -140,7 +140,6 @@ static AstCommand *parse_command(Parser *parser) {
                 // For simplicity, we just leak the command on parse error, and
                 // parse errors aren't high performance paths either way
                 parse_error(file_name, "Expected file name after redirection.");
-                free_ast(NULL);  // No-op placeholder
 
                 return NULL;
 
