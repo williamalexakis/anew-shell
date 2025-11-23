@@ -3,6 +3,10 @@
 #include <string.h>
 #include <unistd.h>
 #include "builtins.h"
+#include "lexer.h"
+#include "parser.h"
+#include "ast.h"
+#include "utils.h"
 
 /* cd command */
 static int builtin_cd(int argc, char **argv) {
@@ -63,10 +67,107 @@ static int builtin_help(int argc, char **argv) {
     (void)argv;
 
     printf("Ash builtin commands:\n");
-    printf("cd <optional: path>    Change directory to a specified path; no path changes to HOME directory.\n");
-    printf("echo <message>         Print a specified message in the standard output.\n");
-    printf("help                   Display all builtin commands and their uses.\n");
-    printf("exit                   Exit the shell.\n");
+    printf("cd <optional: path>          Change directory to a specified path; no path changes to HOME directory.\n");
+    printf("echo <message>               Print a specified message in the standard output.\n");
+    printf("help                         Display all builtin commands and their uses.\n");
+    printf("tokens \"<command string>\"    Display the tokenized form of a command string.\n");
+    printf("ast \"<command string>\"       Display the abstract syntax tree of a command string.\n");
+    printf("exit                         Exit the shell.\n");
+
+    return 0;
+
+}
+
+static int builtin_tokens(int argc, char **argv) {
+
+    if (argc != 2) {
+
+        fprintf(stderr, "[ash] Usage: tokens \"<command string>\"\n");
+
+        return 1;
+
+    }
+
+    TokenVector tokens;
+
+    if (lex(argv[1], &tokens) != 0) {
+
+        fprintf(stderr, "[ash] Error: Lexer error.\n");
+
+        return 1;
+
+    }
+
+    for (size_t i = 0; i < tokens.count; ++i) {
+
+        Token *token = &tokens.tokens[i];
+        const char *type = NULL;
+
+        switch (token->type) {
+
+            case TOK_WORD: type = "WORD"; break;
+            case TOK_PIPE: type = "PIPE"; break;
+            case TOK_SEMICOLON: type = "SEMICOLON"; break;
+            case TOK_REDIR_OUT: type = "REDIRECT OUT"; break;
+            case TOK_REDIR_APPEND: type = "REDIRECT APPEND"; break;
+            case TOK_EOF: type = "EOF"; break;
+            case TOK_ERROR: type = "ERROR"; break;
+
+        }
+
+        if (token->type == TOK_WORD) {
+
+            printf("%zu | %s '%s'\n", token->pos, type, token->lexeme);
+
+        } else {
+
+            printf("%zu | %s\n", token->pos, type);
+
+        }
+
+    }
+
+    token_vector_free(&tokens);
+
+    return 0;
+
+}
+
+static int builtin_ast(int argc, char **argv) {
+
+    if (argc != 2) {
+
+        fprintf(stderr, "[ash] Usage: ast \"<command string>\"\n");
+
+        return 1;
+
+    }
+
+    TokenVector tokens;
+
+    if (lex(argv[1], &tokens) != 0) {
+
+        fprintf(stderr, "[ash] Error: Lexer error.");
+
+        return 1;
+
+    }
+
+    AstSequence *sequence = parse_tokens(&tokens);
+
+    if (!sequence) {
+
+        fprintf(stderr, "[ash] Error: Parser error.");
+
+        token_vector_free(&tokens);
+
+        return 1;
+
+    }
+
+    print_ast_sequence(sequence, 0);
+    free_ast(sequence);
+    token_vector_free(&tokens);
 
     return 0;
 
@@ -88,6 +189,8 @@ static BuiltinEntry builtin_commands[] = {
     {"cd", builtin_cd},
     {"echo", builtin_echo},
     {"help", builtin_help},
+    {"tokens", builtin_tokens},
+    {"ast", builtin_ast},
     {"exit", builtin_exit}
 
 };

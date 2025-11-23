@@ -1,4 +1,5 @@
 #include <stddef.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include "ast.h"
@@ -168,5 +169,63 @@ void free_ast(AstSequence *sequence) {
 
     free(sequence->pipelines);
     free(sequence);
+
+}
+
+static void print_indent(int depth) {
+
+    for (int i = 0; i < depth; i++) printf("    ");
+
+}
+
+void print_ast_command(const AstCommand *command, int depth) {
+
+    printf("COMMAND [");
+
+    for (size_t i = 0; i < command->argc; i++) {
+
+        printf("\"%s\"", command->argv[i]);
+
+        if (i + 1 < command->argc) printf(", ");
+
+    }
+
+    printf("]\n");
+
+    if (command->redir.type != REDIR_NONE) {
+
+        print_indent(depth + 1);
+        printf("╰ REDIRECTION (%s) [\"%s\"]\n", command->redir.type == REDIR_TRUNC ? ">" : ">>", command->redir.path);
+
+    }
+
+}
+
+void print_ast_pipeline(const AstPipeline *pipeline, int depth) {
+
+    printf("PIPELINE\n");
+
+    for (size_t i = 0; i < pipeline->count; i++) {
+
+        print_indent(depth + 1);
+        printf("╰ ");
+        print_ast_command(pipeline->commands[i], depth + 1);
+
+    }
+
+}
+
+void print_ast_sequence(const AstSequence *sequence, int depth) {
+
+    print_indent(depth);
+    printf("SEQUENCE\n");
+
+    for (size_t i = 0; i < sequence->count; i++) {
+
+        print_indent(depth + 1);
+        printf("╰ ");
+        print_ast_pipeline(sequence->pipelines[i], depth + 1);
+
+    }
 
 }

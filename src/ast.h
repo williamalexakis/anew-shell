@@ -51,5 +51,8 @@ AstCommand *create_ast_command(void);
 void add_ast_command_arg(AstCommand *command, const char *lexeme);
 void set_ast_command_redir(AstCommand *command, RedirType type, const char *path);
 void free_ast(AstSequence *sequence);
+void print_ast_sequence(const AstSequence *sequence, int depth);
+void print_ast_pipeline(const AstPipeline *pipeline, int depth);
+void print_ast_command(const AstCommand *command, int depth);
 
 #endif
