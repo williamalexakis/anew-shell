@@ -3,7 +3,6 @@
 #include <stdbool.h>
 #include "ast.h"
 #include "lexer.h"
-#include "utils.h"
 #include "parser.h"
 
 static AstPipeline *parse_pipeline(Parser *parser);  // Forward declaration
