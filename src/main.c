@@ -11,7 +11,7 @@
 /* Display prompt */
 static void print_prompt(void) {
 
-    fputs("ash> ", stdout);
+    fputs("vsh> ", stdout);
     fflush(stdout);
 
 }
@@ -37,7 +37,7 @@ int main(void) {
 
             }
 
-            perror("[ash] Error");
+            perror("[vsh] Error");
 
             break;
 

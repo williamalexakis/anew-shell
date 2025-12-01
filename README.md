@@ -2,30 +2,30 @@
 
 ## Overview
 
-Anew Shell, or Ash, is a simple, custom Unix-style shell focusing on speed, minimalism, and clarity.
+Void Shell, or Vsh, is a simple, custom Unix-style shell focusing on speed, minimalism, and clarity.
 
 ## Features
 
-- **Minimal builtin set** to preserve the Unix model and prevent overlap with existing utilities.
-- **Recursive-descent parser** for clarity, control, and extensibility.
-- **POSIX-based execution model** for accurate Unix-style behaviour.
-- **Builtin debug modes** for convenience, such as displaying token streams and AST structure.
-- **Modular architecture** designed to easily accommodate new features and extensions.
+- **Minimal Builtin Set** – Unix model is preserved and overlap with existing utilities is prevented.
+- **Recursive-Descent Parser** – Semantics are clear, controllable, and extensible.
+- **Builtin Debug Modes** – Display token streams and AST structure for convenience.
+- **Modular Architecture** – New features and extensions are easily accommodated.
 
 ## Examples
 
 ### Commands
 
 Standard Unix commands work as usual:
-```sh
-ash> pwd
+
+```bash
+vsh> pwd
 /your/current/path
-ash> echo hello world
+vsh> echo hello world
 hello world
-ash> echo hello; echo world
+vsh> echo hello; echo world
 hi
 world
-ash> echo hello world | tr a-z A-Z
+vsh> echo hello world | tr a-z A-Z
 HELLO WORLD
 ```
 
@@ -34,8 +34,9 @@ HELLO WORLD
 Debug commands require the input to be passed as a single quoted string.
 
 For example, using `tokens`:
-```sh
-ash> tokens "echo hello world"
+
+```bash
+vsh> tokens "echo hello world"
 4 | WORD 'echo'
 10 | WORD 'hello'
 16 | WORD 'world'
@@ -43,8 +44,9 @@ ash> tokens "echo hello world"
 ```
 
 And using `ast`:
-```sh
-ash> ast "echo hello world"
+
+```bash
+vsh> ast "echo hello world"
 SEQUENCE
     ╰ PIPELINE
         ╰ COMMAND (ECHO) ["hello", "world"]
@@ -62,7 +64,7 @@ SEQUENCE
 
 1. Clone the repo:
     ```sh
-    git clone https://github.com/williamalexakis/ash.git
+    git clone https://github.com/williamalexakis/void-shell.git
     cd ash
     ```
     

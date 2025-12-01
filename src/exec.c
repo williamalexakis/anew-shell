@@ -33,14 +33,14 @@ static void apply_redirection(const AstCommand *command) {
 
     if (fd < 0) {
 
-        perror("[ash] Error");
+        perror("[vsh] Error");
         _exit(1);
 
     }
 
     if (dup2(fd, STDOUT_FILENO) < 0) {
 
-        perror("[ash] Error");
+        perror("[vsh] Error");
         _exit(1);
 
     }
@@ -65,7 +65,7 @@ static void exec_child_command(const AstCommand *command) {
     }
 
     execvp(command->argv[0], command->argv);
-    perror("[ash] Error");
+    perror("[vsh] Error");
     _exit(127);
 
 }
@@ -111,7 +111,7 @@ static int exec_pipeline(const AstPipeline *pipeline, int top_level) {
 
             if (pipe(pipe_fd) < 0) {
 
-                perror("[ash] Error");
+                perror("[vsh] Error");
                 free(pids);
 
                 return 1;
@@ -124,7 +124,7 @@ static int exec_pipeline(const AstPipeline *pipeline, int top_level) {
 
         if (pid < 0) {
 
-            perror("[ash] Error");
+            perror("[vsh] Error");
             free(pids);
 
             return 1;
@@ -138,7 +138,7 @@ static int exec_pipeline(const AstPipeline *pipeline, int top_level) {
 
                 if (dup2(previous_fd, STDIN_FILENO) < 0) {
 
-                    perror("[ash] Error");
+                    perror("[vsh] Error");
                     _exit(1);
 
                 }
@@ -149,7 +149,7 @@ static int exec_pipeline(const AstPipeline *pipeline, int top_level) {
 
                 if (dup2(pipe_fd[1], STDOUT_FILENO) < 0) {
 
-                    perror("[ash] Error");
+                    perror("[vsh] Error");
                     _exit(1);
 
                 }
@@ -195,7 +195,7 @@ static int exec_pipeline(const AstPipeline *pipeline, int top_level) {
 
         if (waitpid(pids[i], &wstatus, 0) < 0) {
 
-            perror("[ash] Error");
+            perror("[vsh] Error");
 
         } else if (i == pipeline->count - 1) {
 

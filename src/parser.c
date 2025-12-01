@@ -49,11 +49,11 @@ static void parse_error(const Token *token, const char *message) {
 
     if (token) {
 
-        fprintf(stderr, "[ash] Error (pos: %zu): %s\n", token->pos, message);
+        fprintf(stderr, "[vsh] Error (pos: %zu): %s\n", token->pos, message);
 
     } else {
 
-        fprintf(stderr, "[ash] Error: %s", message);
+        fprintf(stderr, "[vsh] Error: %s", message);
 
     }
 

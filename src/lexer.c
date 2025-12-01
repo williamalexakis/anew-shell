@@ -127,7 +127,7 @@ static char *lex_string(const char *input, size_t *pos, char quote_char, int *er
     }
 
     // We throw an error if no closing quote is found
-    fprintf(stderr, "[ash] Error: Unterminated string starting at position %zu.\n", start_pos);
+    fprintf(stderr, "[vsh] Error: Unterminated string starting at position %zu.\n", start_pos);
     free(buffer);
 
     *error = 1;

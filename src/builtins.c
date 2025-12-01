@@ -24,7 +24,7 @@ static int builtin_cd(int argc, char **argv) {
 
     if (!path) {
 
-        fprintf(stderr, "[ash] Error: No path and HOME not set.\n");
+        fprintf(stderr, "[vsh] Error: No path and HOME not set.\n");
 
         return 1;
 
@@ -32,7 +32,7 @@ static int builtin_cd(int argc, char **argv) {
 
     if (chdir(path) != 0) {
 
-        perror("[ash] Error");
+        perror("[vsh] Error");
 
         return 1;
 
@@ -81,7 +81,7 @@ static int builtin_tokens(int argc, char **argv) {
 
     if (argc != 2) {
 
-        fprintf(stderr, "[ash] Usage: tokens \"<command string>\"\n");
+        fprintf(stderr, "[vsh] Usage: tokens \"<command string>\"\n");
 
         return 1;
 
@@ -91,7 +91,7 @@ static int builtin_tokens(int argc, char **argv) {
 
     if (lex(argv[1], &tokens) != 0) {
 
-        fprintf(stderr, "[ash] Error: Lexer error.\n");
+        fprintf(stderr, "[vsh] Error: Lexer error.\n");
 
         return 1;
 
@@ -136,7 +136,7 @@ static int builtin_ast(int argc, char **argv) {
 
     if (argc != 2) {
 
-        fprintf(stderr, "[ash] Usage: ast \"<command string>\"\n");
+        fprintf(stderr, "[vsh] Usage: ast \"<command string>\"\n");
 
         return 1;
 
@@ -146,7 +146,7 @@ static int builtin_ast(int argc, char **argv) {
 
     if (lex(argv[1], &tokens) != 0) {
 
-        fprintf(stderr, "[ash] Error: Lexer error.");
+        fprintf(stderr, "[vsh] Error: Lexer error.");
 
         return 1;
 
@@ -156,7 +156,7 @@ static int builtin_ast(int argc, char **argv) {
 
     if (!sequence) {
 
-        fprintf(stderr, "[ash] Error: Parser error.");
+        fprintf(stderr, "[vsh] Error: Parser error.");
 
         token_vector_free(&tokens);
 
