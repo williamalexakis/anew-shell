@@ -23,7 +23,7 @@ vsh> pwd
 vsh> echo hello world
 hello world
 vsh> echo hello; echo world
-hi
+hello
 world
 vsh> echo hello world | tr a-z A-Z
 HELLO WORLD
